@@ -423,9 +423,13 @@ namespace ctranslate2 {
     // They help define row-wise reduction where each block handles a single row.
 
 #ifdef CT2_USE_HIP
-  #define C10_WARP_SIZE warpSize
+    #ifdef __HIP_DEVICE_COMPILE__
+        #define C10_WARP_SIZE warpSize
+    #else
+        #define C10_WARP_SIZE 32
+    #endif
 #else
-  #define C10_WARP_SIZE 32
+    #define C10_WARP_SIZE 32
 #endif
 
     template <index_t ILP = 2>
